@@ -5,26 +5,24 @@ import 'package:command_runner/command_runner.dart';
 const version = '0.0.1'; // GLOBAL
 
 // Metodo Principal
-void main(List<String> argument) async{
-  var runner = CommandRunner();
-  await runner.run(argument);
-//   // Se criar uma variavel dentro do Main, é uma variavel local
-//   if(args.isEmpty || args.first == 'help') {
-//     printusage();
-//   } else if (args.first == 'version') {
-//     print('Dartpedia CLI - Versão $version');
-//   }else if (args.first == 'search') {
-//     final inputArgs = args.length > 1 ? args.sublist(1) : null; // Se tiver algum argumento despois do 'search' ele guarda na variavel 'inputArgs'
-//     searchWikipedia(inputArgs);
-//   }
-//    else{
-//     printusage();
-//   }
+void main (List<String> arguments) {
+  var CommandRunner = CommandRunner(
+    onOutput: (String output) async {
+      await write(output);
+  },
+  onError: (Object error) {
+    if (error is Error) {
+      throw error;
+    },
+    if (error is Exception) {
+      print(error);
+    }
+  },
+  )..addCommand(HelpCommand());
+  commandRunner.run(arguments);
+  
 }
 
-void printusage() {
-  print("Comandos Validos: 'help', 'version', 'search <ARTICLE-TITLE>'");
-}
 
 // ? - Pode ou não receber valores
 void searchWikipedia(List<String>? args) async{
